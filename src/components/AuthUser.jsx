@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { app } from '../Firebase/firebaseInfo'
 
 const AuthUser = () => {
-    const [users, setUser]=useState('')
+    const [users, setUser]=useState(null)
     const auth= getAuth(app)
     useEffect(()=>{
         const unsubscribe=onAuthStateChanged(auth,(currentuser) => {
@@ -12,15 +12,20 @@ const AuthUser = () => {
   setUser(currentuser)
     // ...
   } else {
-    // User is signed out
-    // ...
+   setUser(null)
   }
 });
 return () => unsubscribe()
     }, [auth])
   return (
     <div>
-       <div> {users ? <p>  Welcome, {users?.email}!</p>: <p>Please login</p>}</div>
+         <div>
+      {users ? (
+        <p>Welcome, {users.email || users.displayName}!</p>
+      ) : (
+        <p>Please login</p>
+      )}
+    </div>
       
     </div>
   )
